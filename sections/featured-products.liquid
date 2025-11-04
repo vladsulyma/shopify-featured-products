@@ -1,0 +1,61 @@
+{% comment %}
+  Featured Products Section
+{% endcomment %}
+
+{{ 'featured-products.css' | asset_url | stylesheet_tag }}
+
+<section class="featured-products">
+  <div class="container">
+    <h2 class="featured-products__title">Featured Products</h2>
+
+    {% if section.settings.collection != blank %}
+      {% assign collection = collections[section.settings.collection] %}
+
+      <div class="featured-products__grid">
+        {% for product in collection.products %}
+          <div class="featured-products__card">
+            <img
+              src="{{ product.featured_image | image_url: width: 520 }}"
+              alt="{{ product.title }}"
+              width="{{ product.featured_image.width }}"
+              height="{{ product.featured_image.height }}"
+              class="featured-products__image"
+            />
+
+            <div class="featured-products__info">
+              <h3 class="featured-products__name">{{ product.title }}</h3>
+              <button 
+                type="button" 
+                class="featured-products__button"
+                data-product-id="{{ product.id }}"
+              >
+                Add to cart — {{ product.price | money }}
+              </button>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+    {% else %}
+      <p>No collection selected.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Products",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Products"
+    }
+  ]
+}
+{% endschema %}
